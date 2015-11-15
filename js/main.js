@@ -26,7 +26,7 @@ DayCalendar.prototype = {
 
     var ele = this.element, eventContainer, tempEvent, editEvent, self = this;
     // load view
-    ele.load('../views/grid_container.html', function (response, status, xhr) {
+    ele.load('/day-calendar/views/grid_container.html', function (response, status, xhr) {
       console.log('load done');
       if ( status == "error" ) {
         var msg = "Sorry but there was an error: ";
@@ -284,7 +284,7 @@ DayEvent.prototype = {
     var self = this;
     var eventElement = $('<div id="event-' + this.id + '" class="event-wrapper"></div>');
 
-    eventElement.load('../views/event.html', function (response, status, xhr) {
+    eventElement.load('/day-calendar/views/event.html', function (response, status, xhr) {
       self.updateTemplate();
       if ( typeof(loadDone) === 'function' ) {
         loadDone();
