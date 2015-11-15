@@ -1,0 +1,17 @@
+[
+  {"name": "Event 1",
+    "des": "This is Event 1",
+    "startSlot": 7,
+    "endSlot": 12
+  },
+  {"name": "Event 2",
+    "des": "This is Event 2",
+    "startSlot": 9,
+    "endSlot": 15
+  },
+  {"name": "Event 3",
+    "des": "This is Event 3",
+    "startSlot": 14,
+    "endSlot": 19
+  }
+]
