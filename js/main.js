@@ -56,6 +56,9 @@ DayCalendar.prototype = {
       })
 
       eventContainer.on('mousedown', mousedown);
+
+      // load init data from file
+      self.loadEvents();
     });
 
     var renderTempEvent = this.renderTempEvent.bind(this),
@@ -238,6 +241,22 @@ DayCalendar.prototype = {
       dayEvent.destroy();
       this.events.splice(i, 1);
       this.calculateEventsPosition();
+    }
+  },
+
+  loadEvents: function () {
+    var self = this;
+    $.getJSON('/js/data.json', function (data) {
+      console.log(data);
+      addEvents(data, 0);
+    })
+
+    function addEvents (data, i) {
+      if (i >= data.length) return;
+      var dayEvent = new DayEvent(self, data[i].name, data[i].des, data[i].startSlot, data[i].endSlot, null, function () {
+        self.addEvent( dayEvent );
+        addEvents(data, i + 1);
+      });
     }
   }
 };
