@@ -53,7 +53,9 @@ function calculateEventsPosition(events) {
 
         if ( g[ver][j] == 1 && !s[j] ) {  // has edge and not visited
           if (j > ver) {
-            v.push(j);
+            var k = i;
+            while ( v[k] < j && k < v.length ) k ++;
+            v.splice(k, 0, j);  // insert j at position k
             end ++;
           }
 
