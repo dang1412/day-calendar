@@ -53,7 +53,10 @@ function calculateEventsPosition(events) {
 
         if ( g[ver][j] == 1 && !s[j] ) {  // has edge and not visited
           if (j > ver) {
-            v.push(j);
+            // push j in order
+            var k = i;
+            while ( v[k] < j && k < v.length ) k ++;
+            v.splice(k, 0, j);  // insert j at position k
             end ++;
           }
 
@@ -87,7 +90,7 @@ function calculateEventsPosition(events) {
       as[i] = i;
     }
 
-    for (var i = v; i < n; i ++) if ( g[v][i] == 1 && s[i] != null ) {
+    for ( i = v; i < n; i ++) if ( g[v][i] == 1 && s[i] != null ) {
       as[ s[i] ] = null;
     }
 
@@ -96,7 +99,6 @@ function calculateEventsPosition(events) {
   }
 
 }
-
 
 function isOverlap (e1, e2) {
   return e1.endSlot >= e2.startSlot;
