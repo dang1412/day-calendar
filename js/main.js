@@ -13,16 +13,14 @@ var DayCalendar = function (ele) {
   this.editEvent = null;  // edit event form
   this.containerBaseWidth = null; // events container width
   this.events = [];
-  this.baseTime = null;
+  this.eleBaseY = null;
+  this.eleBaseX = null;
   this.init();
 }
 
 DayCalendar.prototype = {
   init: function () {
     console.log('init');
-
-    this.baseTime = new Date();
-    this.baseTime.setHours(0);
 
     var ele = this.element, eventContainer, tempEvent, editEvent, self = this;
     // load view
@@ -36,6 +34,9 @@ DayCalendar.prototype = {
       self.eventContainer = eventContainer = ele.find('.events-container'),
       self.tempEvent = tempEvent = eventContainer.find('.temp-event');
       self.editEvent = editEvent = eventContainer.find('.edit-event');
+
+      self.eleBaseY = eventContainer.offset().top;
+      self.eleBaseX = eventContainer.offset().left;
 
       // Event Register
 
@@ -386,6 +387,7 @@ DayEvent.prototype = {
     }
 
     function click (e) {
+      console.log('-----click');
       if ( dragging || resizing ) {
         return;
       }
@@ -393,7 +395,7 @@ DayEvent.prototype = {
         console.log('------remove', self.id, self.name);
         return self.parent.remove(self);
       }
-      var pos = {top: event.pageY - self.parent.eleBaseY, left: event.pageX - self.parent.eleBaseX}
+      var pos = {top: e.pageY - self.parent.eleBaseY, left: e.pageX - self.parent.eleBaseX}
       self.parent.showEditEvent(pos, self);
     }
   },
