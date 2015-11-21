@@ -412,8 +412,11 @@ DayEvent.prototype = {
   updatePosition: function () {
     if ( !this.b ||  !this.s) return;
     try {
-      this.eventElement.css('width', ( 100 / this.b * this.l - .6 ) + '%');
-      this.eventElement.css('left', ( (this.s - 1) / this.b * 100 + .3 ) + '%');
+      var width = ( 100 / this.b * this.l - .6 ) + '%',
+        left = ( (this.s - 1) / this.b * 100 + .3 ) + '%'
+      //this.eventElement.css('width', ( 100 / this.b * this.l - .6 ) + '%');
+      //this.eventElement.css('left', ( (this.s - 1) / this.b * 100 + .3 ) + '%');
+      this.eventElement.animate({'width': width, 'left': left}, 400);
     } catch(e) {
       console.log(e);
     }
