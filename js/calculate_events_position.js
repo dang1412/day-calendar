@@ -2,14 +2,14 @@
 
 /*
  * events: array [{startSlot: 1, endSlot: 3},...]
- * return: array [{startSlot: 1, endSlot: 3, s: , b: },...]
+ * return: array [{startSlot: 1, endSlot: 3, s: , b: , l:},...]
  */
 
 function calculateEventsPosition(events) {
 
   // assume that events already sorted in order of endSlot increase
 
-  var g = [], s = [], b = [], n = events.length;
+  var g = [], s = [], b = [], l = [], n = events.length;
 
   for (var i = 0; i < n; i ++) {
     g[i] = [];
@@ -74,10 +74,23 @@ function calculateEventsPosition(events) {
     }
   }
 
+  // all length set to 1
+  for (var i = 0; i < n; i ++) {
+    l[i] = 1;
+  }
+
+  var start = 0, i = 0;
+  while (start < n) {
+    if (i >= n) i = start;
+    if ( !enhance(i) && i == start  ) start ++;
+    i ++;
+  }
+
   // result - update events with slot and base
   for (var i = 0; i < n; i ++) {
     events[i].s = s[i];
     events[i].b = b[i];
+    events[i].l = l[i];
   }
 
   console.log('-------------- calculated: ', events);
@@ -97,6 +110,65 @@ function calculateEventsPosition(events) {
     // remove null
     return as.filter(Number);
   }
+
+  // attemp to make v larger
+  function enhance (v) {
+    var l1 = l.slice(0), s1 = s.slice(0);
+    l1[v] += 1; // enhance v by 1
+    for (var i = 0; i < n; i ++) {
+      var g_v = [];
+      for (var j = i; j < n; j ++) if (g[i][j] == 1) g_v.push(j);
+
+      // sort g_v by slot increase
+      g_v.sort(function (v1, v2) {
+        return s1[v1] - s1[v2];
+      });
+
+      // check if an event pos conflict with previous, shift it to the right
+      var j = 1;
+      for ( ; j < g_v.length; j ++) {
+        if ( s1[ g_v[j-1] ] + l1[ g_v[j-1] ] > s1[ g_v[j] ] ) {
+          s1[ g_v[j] ] = s1[ g_v[j-1] ] + l1[ g_v[j-1] ];
+          if ( s1[ g_v[j] ] > b[ g_v[j] ] ) return false;
+        }
+      }
+      // check last v
+      j = j - 1;
+      if ( s1[ g_v[j] ] + l1[ g_v[j] ] - 1 > b[ g_v[j] ] ) return false;
+    }
+
+    if ( checkAllOverlap(s1, l1) ) return false;
+
+    // able to enhance
+    l = l1;
+    s = s1;
+    return true;
+  }
+
+  // return true if an overlap existing
+  function checkAllOverlap (s1, l1) {
+    for (var i = 0; i < n; i ++) {
+      var g_v = [];
+      for (var j = i; j < n; j ++) if (g[i][j] == 1) g_v.push(j);
+
+      // sort g_v by slot increase
+      g_v.sort(function (v1, v2) {
+        return s1[v1] - s1[v2];
+      });
+
+      var j = 1;
+      for ( ; j < g_v.length; j ++) {
+        if ( s1[ g_v[j-1] ] + l1[ g_v[j-1] ] > s1[ g_v[j] ] ) {
+          return true;
+        }
+      }
+      // check last v
+      j = j - 1;
+      if ( s1[ g_v[j] ] + l1[ g_v[j] ] - 1 > b[ g_v[j] ] ) return true;
+    }
+  }
+
+  return false;
 
 }
 

@@ -412,7 +412,7 @@ DayEvent.prototype = {
   updatePosition: function () {
     if ( !this.b ||  !this.s) return;
     try {
-      this.eventElement.css('width', ( 100 / this.b - .6 ) + '%');
+      this.eventElement.css('width', ( 100 / this.b * this.l - .6 ) + '%');
       this.eventElement.css('left', ( (this.s - 1) / this.b * 100 + .3 ) + '%');
     } catch(e) {
       console.log(e);
